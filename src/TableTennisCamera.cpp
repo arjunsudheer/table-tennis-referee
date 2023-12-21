@@ -1,0 +1,60 @@
+#include "TableTennisCamera.h"
+
+
+// create a VideoCapture object to access camera frames, then capture the first frame of the camera feed
+TableTennisCamera::TableTennisCamera(int portNumber, std::string name) {
+    // set the camera name to the specified name
+    TableTennisCamera::m_cameraName = name;
+    // create a new VideoCapture device with the specified port number, or 0 by default
+    cv::VideoCapture capture(portNumber);
+    // verify if the VideoCapture device was opened
+    if (!capture.isOpened()) {
+        std::cerr << "VideoCapture device was not opened!" << std::endl;
+    }
+    // store the VideoCapture instance in the camera private member variable
+    TableTennisCamera::m_camera = capture;
+    // get the most recent camera feed frame
+    TableTennisCamera::getNextFrame();
+}
+
+// when destroyed, close the camera feed
+TableTennisCamera::~TableTennisCamera() {
+    TableTennisCamera::m_camera.release();
+}
+
+/** 
+ * Will display the following annotations:
+ * 
+ * Table tennis table - purple square
+ * Table tennis ball - green square
+*/
+void TableTennisCamera::displayAnnotations() {
+    TableTennisCamera::getNextFrame();
+    std::cout << "In parent class of displayAnnotations()" << std::endl;
+}
+
+// returns true if the ball makes contact with the table (the ball bounced), and false otherwise
+bool TableTennisCamera::checkBounce() {
+    TableTennisCamera::getNextFrame();
+    std::cout << "In parent class of checkBounce()" << std::endl;
+    return true;
+}
+
+// returns true if the ball hits the ground, and false otherwise
+bool TableTennisCamera::hitGround() {
+    TableTennisCamera::getNextFrame();
+    return true;
+}
+
+// returns the most recent image taken from the VideoCapture device
+cv::Mat TableTennisCamera::getImage() const {
+    return TableTennisCamera::m_image;
+}
+
+// updates the m_image member variable with the most recent camera feed frame
+void TableTennisCamera::getNextFrame() {
+    // print an error message if the VideoCapture device was not able to retrieve the next frame in the camera feed
+    if (!TableTennisCamera::m_camera.read(TableTennisCamera::m_image)) {
+        std::cerr << "Could not retrieve next frame from camera feed" << std::endl;
+    }
+}
