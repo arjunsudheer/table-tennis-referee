@@ -10,6 +10,8 @@ set (MyProject_SOURCES
     ./src/main.cpp
     ./src/main.h
     ./src/GenericIncludes.h
+    ./src/EndOfStreamException.cpp
+    ./src/EndOfStreamException.h
 )
 find_package(OpenCV REQUIRED)
 add_executable(MyProject ${MyProject_SOURCES})
